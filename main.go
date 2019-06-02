@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	fmt.Printf("%q\n", 0x4E2D)
 	msg := "Hello, 世界"
 	bs := []byte(msg)
 	for _, b := range bs {
