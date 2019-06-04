@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-type Value interface{}
-
 type ValueConverter interface {
 	ConvertValue(v interface{}) (Value, error)
 }

@@ -1,7 +1,7 @@
 package sql
 
 import (
-	"database/sql/driver"
+	"github.com/dimdark/gdk/database/sql/driver"
 	"sort"
 	"strconv"
 	"sync"
@@ -102,8 +102,21 @@ type NullString struct {
 	String string
 	Valid bool
 }
+func (ns *NullString) Scan(value interface{}) error {
+	if value == nil {
+		ns.String, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return convertAssign(&ns.String, value)
+}
 
-
+func (ns NullString) Value(driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.String, nil
+}
 
 
 
