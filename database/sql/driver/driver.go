@@ -69,7 +69,7 @@ type Stmt interface {
 	Close() error
 	NumInput() int
 	Exec(args []Value) (Result, error)
-	Query(args []Value) (Result ,error)
+	Query(args []Value) (Rows,error)
 }
 type StmtExecContext interface {
 	ExecContext(ctx context.Context, args []NamedValue) (Result, error)
