@@ -111,17 +111,78 @@ func (ns *NullString) Scan(value interface{}) error {
 	return convertAssign(&ns.String, value)
 }
 
-func (ns NullString) Value(driver.Value, error) {
+func (ns NullString) Value() (driver.Value, error){
 	if !ns.Valid {
 		return nil, nil
 	}
 	return ns.String, nil
 }
 
+type NullInt64 struct {
+	Int64 int64
+	Valid bool
+}
+func (n *NullInt64) Scan(value interface{}) error {
+	if value == nil {
+		n.Int64, n.Valid = 0, false
+		return nil
+	}
+	n.Valid = true
+	return convertAssign(&n.Int64, value)
+}
+func (n *NullInt64) Value() (driver.Value, error) {
+	if !n.Valid {
+		return nil, nil
+	}
+	return n.Int64, nil
+}
 
+type NullFloat64 struct {
+	Float64 float64
+	Valid bool
+}
+func (n *NullFloat64) Scan(value interface{}) error {
+	if value == nil {
+		n.Float64, n.Valid = 0, false
+		return nil
+	}
+	n.Valid = true
+	return convertAssign(&n.Float64, value)
+}
+func (n *NullFloat64) Value() (driver.Value, error) {
+	if !n.Valid {
+		return nil, nil
+	}
+	return n.Float64, nil
+}
 
+type NullBool struct {
+	Bool bool
+	Valid bool
+}
+func (n *NullBool) Scan(value interface{}) error {
+	if value == nil {
+		n.Bool, n.Valid = false, false
+		return nil
+	}
+	n.Valid = true
+	return convertAssign(&n.Bool, value)
+}
+func (n *NullBool) Value() (driver.Value, error) {
+	if !n.Valid {
+		return nil, nil
+	}
+	return n.Bool, nil
+}
 
+type DB struct {
+	waitDuration int64
+	connector driver.Connector
+	numClosed uint64
 
+	mu sync.Mutex
+	freeConn []*driverConn
+}
 
 
 
